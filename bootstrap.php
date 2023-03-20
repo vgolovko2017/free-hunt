@@ -3,7 +3,7 @@
 require 'vendor/autoload.php';
 
 use Dotenv\Dotenv;
-use Src\Models\Database;
+use Src\Database;
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();

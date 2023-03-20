@@ -91,7 +91,10 @@ MySql_Query;
             'PHP',
             'Web programming',
             'Website development',
-            'HTML and CSS'
+            'HTML and CSS',
+            'JavaScript',
+            'Rewriting',
+            'Python'
         ];
     }
 }
