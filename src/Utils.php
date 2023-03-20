@@ -53,7 +53,7 @@ MySql_Query;
             'name' => '< 500 UAH', 'value' => 0
         ];
         $arr[self::CHART_BETWEEN_500_AND_1000] = [
-            'name' => '500-1000 UAH','value' => 0
+            'name' => '500-1000 UAH', 'value' => 0
         ];
         $arr[self::CHART_BETWEEN_1000_AND_5000] = [
             'name' => '1000-5000 UAH', 'value' => 0

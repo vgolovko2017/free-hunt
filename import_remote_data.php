@@ -33,7 +33,7 @@ function importProjects($dbConnection)
             if ($employer_fname && $employer_lname) {
                 $employer_name = $employer_fname . " " . $employer_lname;
             }
-                
+
             $employer_login =
                 $project->attributes->employer->login ?? null;
             $budget = $project->attributes->budget->amount ?? null;
