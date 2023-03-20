@@ -5,13 +5,7 @@ require '../bootstrap.php';
 use Src\Utils;
 
 $filter_value = false;
-$filter_values = [
-    'All',
-    'PHP',
-    'Web programming',
-    'Website development',
-    'HTML and CSS'
-];
+$filter_values = Utils::getDefaultFilterValues();
 
 $url_components = parse_url($_SERVER['REQUEST_URI']);
 parse_str($url_components['query'], $params);

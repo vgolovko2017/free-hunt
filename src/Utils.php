@@ -83,4 +83,15 @@ MySql_Query;
             $arr[self::CHART_MORE_THAN_5000]['value'] += 1;
         }
     }
+
+    public static function getDefaultFilterValues()
+    {
+        return [
+            'All',
+            'PHP',
+            'Web programming',
+            'Website development',
+            'HTML and CSS'
+        ];
+    }
 }
