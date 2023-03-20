@@ -120,35 +120,46 @@ MySql_Query;
 </head>
 
 <script type="text/javascript">
-    $(document).ready(function(){
+    $(document).ready(function() {
+        let url_params = "?chart_data=get";
+        
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const fvalue = urlParams.get('fvalue');
+
+        if (fvalue) {
+            url_params += "&fvalue=" + fvalue;
+        }
+
         $.ajax({
-            url: "?chart_data=get",
+            url: url_params,
             method: "GET",
             success: function(data) {
                 data = jQuery.parseJSON(data);
-                console.log(data);
 
-                var name = [];
-                var value = [];
+                let name = [];
+                let value = [];
 
-                for (var i in data) {
+                for (let i in data) {
                     name.push(data[i].name);
                     value.push(data[i].value);
                 }
 
-                var chartdata = {
+                let chartdata = {
                     labels: name,
                     datasets: [{
                         label: 'Pie chart',
-                        backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+                        backgroundColor : [
+                            '#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'
+                        ],
                         hoverBackgroundColor: 'rgba(230, 236, 235, 0.75)',
                         hoverBorderColor: 'rgba(230, 236, 235, 0.75)',
                         data: value
                     }]
                 };
                 
-                var graphTarget = $("#graphCanvas");
-                var barGraph = new Chart(graphTarget, {
+                let graphTarget = $("#graphCanvas");
+                let barGraph = new Chart(graphTarget, {
                     type: 'pie',
                     data: chartdata,
                 });
