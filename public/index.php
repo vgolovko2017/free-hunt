@@ -2,11 +2,7 @@
 
 require '../bootstrap.php';
 
-const NOT_SET_VALUE = 0;
-const LESS_THAN_500 = 1;
-const BETWEEN_500_AND_1000 = 2;
-const BETWEEN_1000_AND_5000 = 3;
-const MORE_THAN_5000 = 4;
+use Src\Utils;
 
 $filter_value = false;
 $filter_values = [
@@ -29,75 +25,16 @@ if ($fvalue && in_array($fvalue, $filter_values)) {
 
 $chart_data = $params['chart_data'] ?? null;
 if ($chart_data && $chart_data == 'get') {
-    $arr[NOT_SET_VALUE] = [
-        'name' => 'Not set', 'value' => 0
-    ];
-    $arr[LESS_THAN_500] = [
-        'name' => '< 500 UAH', 'value' => 0
-    ];
-    $arr[BETWEEN_500_AND_1000] = [
-        'name' => '500-1000 UAH','value' => 0
-    ];
-    $arr[BETWEEN_1000_AND_5000] = [
-        'name' => '1000-5000 UAH', 'value' => 0
-    ];
-    $arr[MORE_THAN_5000] = [
-        'name' => '> 5000 UAH', 'value' => 0
-    ];
-
-    $projects = getProjects($dbConnection, $filter_value);
+    $arr = Utils::setInitialChartData();
+    $projects = Utils::getProjects($dbConnection, $filter_value);
+    
     foreach($projects as $project) {
-        if (!$project['budget']) {
-            $arr[NOT_SET_VALUE]['value'] += 1;
-        }
-        else if ($project['budget'] < 500) {
-            $arr[LESS_THAN_500]['value'] += 1;
-        }
-        else if ($project['budget'] >= 500 && $project['budget'] < 1000) {
-            $arr[BETWEEN_500_AND_1000]['value'] += 1;
-        }
-        else if ($project['budget'] >= 1000 && $project['budget'] <= 5000) {
-            $arr[BETWEEN_1000_AND_5000]['value'] += 1;
-        }
-        else if ($project['budget'] > 5000) {
-            $arr[MORE_THAN_5000]['value'] += 1;
-        }
+        Utils::collectRangeChartDataByBudget($project['budget'], $arr);
     }
 
     die(json_encode(array_values($arr)));
 }
 
-function getProjects($dbConnection, $filter = false)
-{
-    $query = <<<MySql_Query
-        SELECT 
-            projects.id,
-            projects.name as pname,
-            link,
-            budget,
-            skills.name as sname,
-            employer_login,
-            employer_name
-            FROM projects
-                JOIN projects_skills ON projects.id = projects_skills.project_id
-                JOIN skills ON projects_skills.skill_id = skills.id
-MySql_Query;
-
-    if ($filter) {
-        $query .= " WHERE skills.name like '%" . htmlspecialchars($filter) . "%'";
-    }
-
-    try {
-        $data = $dbConnection->prepare($query);
-        $data->execute();
-        $data = $data->fetchAll(PDO::FETCH_ASSOC);
-    }
-    catch (\PDOException $e) {
-        die($e->getMessage());
-    }
-
-    return $data;
-}
 ?>
 
 <!doctype html>
@@ -211,7 +148,7 @@ MySql_Query;
                     <div class="col textellipsis"><b>Employer Login</b></div>
                     <div class="col textellipsis"><b>Employer Name</b></div>
 		        </div>	
-                <?php $projects = getProjects($dbConnection, $filter_value); ?>
+                <?php $projects = Utils::getProjects($dbConnection, $filter_value); ?>
                 <?php foreach($projects as $project) { ?>
 			        <div class="row">
 				        <div class="col textellipsis" data-toggle="tooltip" title="<?php echo $project['pname']; ?>"><?php echo $project['pname']; ?></div>
