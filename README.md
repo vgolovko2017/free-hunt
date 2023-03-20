@@ -3,9 +3,9 @@ FreelanceFunt project's viewer.
 - git clone https://github.com/vgolovko2017/free-hunt.git
 - composer install
 - create empty mysql database and change .env file according to your credentials
-- create db tables:
+- run script and create db tables:
     - php migrate.php
-- import all necessary data from freeHunt:
+- run script and import all necessary data from freeHunt:
     - php import_remote_data.php
 - run project:
     - php -S localhost:8000 -t public
